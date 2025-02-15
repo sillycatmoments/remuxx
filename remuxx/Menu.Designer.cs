@@ -63,6 +63,7 @@
             InstallLabel.Size = new Size(91, 15);
             InstallLabel.TabIndex = 1;
             InstallLabel.Text = "crazy easter egg";
+            InstallLabel.Click += InstallLabel_Click;
             // 
             // GitHubLink
             // 
@@ -89,7 +90,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(189, 121);
+            ClientSize = new Size(189, 128);
             Controls.Add(label1);
             Controls.Add(GitHubLink);
             Controls.Add(InstallLabel);

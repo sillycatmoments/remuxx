@@ -7,10 +7,14 @@ namespace remuxx
 {
     public partial class Menu : Form
     {
+        private Label FFmpegStatusLabel;
+
         public Menu()
         {
             InitializeComponent();
+            InitializeFFmpegStatusLabel();
             UpdateInstallLabel();
+            CheckFFmpegInstallation();
         }
 
         private void InstallButton_Click(object sender, EventArgs e)
@@ -85,6 +89,63 @@ namespace remuxx
         private void GitHubLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("explorer", "https://github.com/sillycatmoments");
+        }
+
+        private void InitializeFFmpegStatusLabel()
+        {
+            FFmpegStatusLabel = new Label
+            {
+                Text = "Checking for FFmpeg...",
+                AutoSize = true,
+                Location = new System.Drawing.Point(19, 105)
+            };
+            Controls.Add(FFmpegStatusLabel);
+        }
+
+        private void CheckFFmpegInstallation()
+        {
+            if (IsFFmpegInstalled())
+            {
+                FFmpegStatusLabel.Text = "FFmpeg found!";
+            }
+            else
+            {
+                FFmpegStatusLabel.Text = "FFmpeg not found!";
+            }
+        }
+
+        private bool IsFFmpegInstalled()
+        {
+            try
+            {
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "ffmpeg",
+                    Arguments = "-version",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using (Process process = Process.Start(psi))
+                {
+                    process.WaitForExit();
+                    string output = process.StandardOutput.ReadToEnd();
+                    string error = process.StandardError.ReadToEnd();
+
+                    return output.Contains("ffmpeg version") || error.Contains("ffmpeg version");
+                }
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void InstallLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
